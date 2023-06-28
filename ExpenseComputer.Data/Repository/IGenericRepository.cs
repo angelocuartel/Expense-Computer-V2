@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ExpenseComputer.Data.Repository
+﻿namespace ExpenseComputer.Data.Repository
 {
-    public interface IGenericRepository <T>
+    public interface IGenericRepository<T>
     {
         Task<T> GetByIdAsync(int id);
 

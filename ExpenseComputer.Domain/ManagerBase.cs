@@ -1,9 +1,4 @@
 ﻿using ExpenseComputer.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExpenseComputer.Domain
 {
@@ -13,7 +8,7 @@ namespace ExpenseComputer.Domain
         private bool _unitOfWorkInternallyManaged;
         public ManagerBase(IExpenseUnitOfWork expenseUnitOfWork)
         {
-            _expenseUnitOfWork= expenseUnitOfWork;
+            _expenseUnitOfWork = expenseUnitOfWork;
         }
 
         public ManagerBase(AppDbContext context)
@@ -24,7 +19,7 @@ namespace ExpenseComputer.Domain
 
         public void Commit()
         {
-            if(_unitOfWorkInternallyManaged)
+            if (_unitOfWorkInternallyManaged)
             {
                 _expenseUnitOfWork.Commit();
             }

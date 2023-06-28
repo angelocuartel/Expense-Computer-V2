@@ -16,8 +16,6 @@ namespace ExpenseComputer.Data
         private readonly ExpenseRepository<Expense> _expenseRepository;
 
         private readonly AppDbContext _dbContext;
-
-        private bool _contextIsDisposed;
         public ExpenseUnitOfWork(AppDbContext dbContext)
         {
             _dbContext = dbContext;
