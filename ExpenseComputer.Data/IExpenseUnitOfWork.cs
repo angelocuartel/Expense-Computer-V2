@@ -12,7 +12,6 @@ namespace ExpenseComputer.Data
     {
         IGenericRepository<Expense> ExpenseRepository { get; }
 
-        void CreateTransaction();
         void Commit();
         void Rollback();
 

@@ -16,7 +16,6 @@ namespace ExpenseComputer.Data
         private readonly ExpenseRepository<Expense> _expenseRepository;
 
         private readonly AppDbContext _dbContext;
-        private IDbContextTransaction _dbTransaction;
 
         private bool _contextIsDisposed;
         public ExpenseUnitOfWork(AppDbContext dbContext)
@@ -29,51 +28,64 @@ namespace ExpenseComputer.Data
 
         public void Commit()
         {
-            if(_dbTransaction is null)
+            if(_dbContext is null)
             {
-                throw new NullReferenceException("No Transaction was created");
+                throw new NullReferenceException("No context was created");
             }
             else
             {
-                _dbTransaction.Commit();
+                _dbContext.SaveChangesAsync();
             }
         }
 
         public void Rollback()
         {
-            if(_dbTransaction is null)
+            if(_dbContext is null)
             {
-                throw new NullReferenceException("No Transaction was created");
+                throw new NullReferenceException("No context was created");
             }
             else
             {
-                _dbTransaction.Rollback();
-                _dbTransaction.Dispose();
+                UpdateChangedEntriesFromDbContext();
             }
         }
 
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            _dbContext.Dispose();
         }
 
-        private void Dispose(bool disposing)
+        //private void Dispose(bool disposing)
+        //{
+        //    if (!_contextIsDisposed)
+        //    {
+        //        if (disposing)
+        //        {
+        //            _dbContext.Dispose();
+        //        }
+        //    }
+
+        //    _contextIsDisposed = true;
+        //}
+
+        private void UpdateChangedEntriesFromDbContext()
         {
-            if (!_contextIsDisposed)
+            var changedEntries = _dbContext.ChangeTracker.Entries()
+                   .Where(i => i.State != Microsoft.EntityFrameworkCore.EntityState.Unchanged);
+
+            foreach (var entry in changedEntries)
             {
-                if (disposing)
+                switch (entry.State)
                 {
-                    _dbContext.Dispose();
+                    case Microsoft.EntityFrameworkCore.EntityState.Added:
+                        entry.State = Microsoft.EntityFrameworkCore.EntityState.Unchanged;
+                        break;
+                    case Microsoft.EntityFrameworkCore.EntityState.Deleted:
+                    case Microsoft.EntityFrameworkCore.EntityState.Modified:
+                        entry.Reload();
+                        break;
                 }
             }
-
-            _contextIsDisposed = true;
-        }
-
-        public void CreateTransaction()
-        {
-            _dbTransaction = _dbTransaction ?? _dbContext.Database.BeginTransaction();
         }
     }
 }
