@@ -1,7 +1,9 @@
+using ExpenseComputer.Api.Configurations;
 using ExpenseComputer.Data;
 using ExpenseComputer.Domain;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +14,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("dbConnection")));
+
+//dependencies
 builder.Services.AddTransient<ExpenseManager>();
+
+//automapper
+builder.Services.AddAutoMapper(typeof(AutomapperProfile));
+
 
 var app = builder.Build();
 var classList = Assembly.GetExecutingAssembly().GetTypes().Select(i => i.Name).ToList();
