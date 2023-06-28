@@ -1,4 +1,6 @@
-﻿namespace ExpenseComputer.Data.Repository
+﻿using ExpenseComputer.Entity;
+
+namespace ExpenseComputer.Data.Repository
 {
     public interface IGenericRepository<T>
     {

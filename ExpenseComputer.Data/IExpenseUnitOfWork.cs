@@ -1,10 +1,5 @@
 ﻿using ExpenseComputer.Data.Repository;
 using ExpenseComputer.Entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ExpenseComputer.Data
 {
@@ -12,7 +7,7 @@ namespace ExpenseComputer.Data
     {
         IGenericRepository<Expense> ExpenseRepository { get; }
 
-        void Commit();
+        Task CommitAsync();
         void Rollback();
 
         void Dispose();

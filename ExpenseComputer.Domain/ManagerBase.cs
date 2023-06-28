@@ -17,11 +17,11 @@ namespace ExpenseComputer.Domain
             _unitOfWorkInternallyManaged = true;
         }
 
-        public void Commit()
+        public async Task CommitAsync()
         {
             if (_unitOfWorkInternallyManaged)
             {
-                _expenseUnitOfWork.Commit();
+                await _expenseUnitOfWork.CommitAsync();
             }
         }
 

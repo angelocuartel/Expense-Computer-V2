@@ -20,6 +20,12 @@ namespace ExpenseComputer.Domain
             return await _expenseUnitOfWork.ExpenseRepository.GetListAsync();
         }
 
+        public async Task AddExpenseAsync(Expense expense)
+        {
+            await _expenseUnitOfWork.ExpenseRepository.CreateAsync(expense);
+            await _expenseUnitOfWork.CommitAsync();
+        }
+
 
     }
 }

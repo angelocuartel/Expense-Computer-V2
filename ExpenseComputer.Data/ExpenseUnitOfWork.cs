@@ -20,11 +20,12 @@ namespace ExpenseComputer.Data
         {
             _dbContext = dbContext;
 
+
             _expenseRepository = new ExpenseRepository<Expense>(_dbContext);
         }
         public IGenericRepository<Expense> ExpenseRepository => _expenseRepository;
 
-        public void Commit()
+        public async Task CommitAsync()
         {
             if(_dbContext is null)
             {
@@ -32,7 +33,7 @@ namespace ExpenseComputer.Data
             }
             else
             {
-                _dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync();
             }
         }
 

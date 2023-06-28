@@ -29,7 +29,7 @@ namespace ExpenseComputerAPI.Implementations
         }
 
         public async Task<IEnumerable<T>> GetListAsync()
-        =>  _context.Set<T>();
+        => _context.Set<T>();
 
         Task<T> IGenericRepository<T>.GetByIdAsync(int id)
         {
@@ -41,9 +41,10 @@ namespace ExpenseComputerAPI.Implementations
             throw new NotImplementedException();
         }
 
-        public Task CreateAsync(T obj)
+        public async Task CreateAsync(T obj)
         {
-            throw new NotImplementedException();
+            var set = _context.Set<T>();
+            await set.AddAsync(obj);
         }
     }
 }
