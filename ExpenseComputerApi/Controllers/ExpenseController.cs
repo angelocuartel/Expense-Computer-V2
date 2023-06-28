@@ -1,5 +1,8 @@
-﻿using ExpenseComputer.Data;
+﻿using AutoMapper;
+using ExpenseComputer.Data;
 using ExpenseComputer.Domain;
+using ExpenseComputer.Dto.Request;
+using ExpenseComputer.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
@@ -12,26 +15,28 @@ namespace ExpenseComputer.Api.Controllers
     {
 
         private readonly ExpenseManager _expenseManager;
+        private readonly IMapper _mapper;
 
-        public ExpenseController(ExpenseManager expenseManager)
+        public ExpenseController(ExpenseManager expenseManager,IMapper mapper)
         {
             _expenseManager = expenseManager;
+            _mapper = mapper;
         }
 
         [HttpGet]
         [Route("")]
         public async Task<IActionResult> GetExpense()
         {
-
             return Ok(await _expenseManager.GetExpenseAsync());
         }
 
-        [HttpGet]
-        [Route("assembly")]
-        public IActionResult GetClasses()
+        [HttpPost]
+        [Route("")]
+        public async Task<IActionResult> CreateExpenseAsync(ExpenseRequestDto model)
         {
-            var classList = Assembly.GetExecutingAssembly().GetTypes().Where(i => i.IsPublic).Select(i => i.Name);
-            return Ok(classList);
+            var expense = _mapper.Map<Expense>(model);
+            await _expenseManager.AddExpenseAsync(expense);
+            return Ok();
         }
     }
 }
